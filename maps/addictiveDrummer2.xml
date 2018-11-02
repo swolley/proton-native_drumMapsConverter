@@ -623,7 +623,7 @@
       </item>
       <item>
          <int name="INote" value="47"/>
-         <int name="ONote" value=""/>   <!--si può lasciarlo vuoto?-->
+         <int name="ONote" value="0"/>
          <int name="Channel" value="9"/>
          <float name="Length" value="200"/>
          <int name="Mute" value="0"/>
@@ -831,7 +831,7 @@
       </item>
       <item>
          <int name="INote" value="63"/>
-         <int name="ONote" value=""/> <!--si può lasciare vuoto?-->
+         <int name="ONote" value="0"/>
          <int name="Channel" value="9"/>
          <float name="Length" value="200"/>
          <int name="Mute" value="0"/>
@@ -961,7 +961,7 @@
       </item>
       <item>
          <int name="INote" value="73"/>
-         <int name="ONote" value=""/>   <!--si può lasciare vuoto?-->
+         <int name="ONote" value="0"/>
          <int name="Channel" value="9"/>
          <float name="Length" value="200"/>
          <int name="Mute" value="0"/>
@@ -974,7 +974,7 @@
       </item>
       <item>
          <int name="INote" value="74"/>
-         <int name="ONote" value=""/> <!--si può lasciare vuoto?-->
+         <int name="ONote" value="0"/>
          <int name="Channel" value="9"/>
          <float name="Length" value="200"/>
          <int name="Mute" value="0"/>
@@ -1000,7 +1000,7 @@
       </item>
       <item>
          <int name="INote" value="76"/>
-         <int name="ONote" value=""/>   <!--si può lasciare vuoto?-->
+         <int name="ONote" value="0"/>   
          <int name="Channel" value="9"/>
          <float name="Length" value="200"/>
          <int name="Mute" value="0"/>

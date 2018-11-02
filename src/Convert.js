@@ -18,7 +18,7 @@ export default class Convert extends Component {
 		availableMaps: []
 	};
 
-	componentWillMount() { 
+	componentWillMount() {
 		let mapsPath = path.resolve(__dirname, '../maps');
 		this.state.availableMaps = fs.readdirSync(mapsPath).map(file => {
 			let mapname = file.replace('.xml', '').replace(/([A-Z]|[0-9])/g, ' $1').trim();
@@ -27,33 +27,32 @@ export default class Convert extends Component {
 	}
 
 	convert() {
-		converter.convertMidi((result, description) => { 
+		converter.convertMidi((result, description) => {
 			var newDescription = this.state.description;
-			if (result) { 
-				newDescription.concat(description);
-			} else {
-				newDescription.push((new Date()).toLocaleTimeString('en-GB') + ': ' + result);
-			}
-			
+
+			result
+				? newDescription = newDescription.concat(description)
+				: newDescription.push((new Date()).toLocaleTimeString('en-GB') + ': ' + result);
+
 			this.setState(Object.assign(this.state, { result, description: newDescription }));
-		 });
-		
+		});
+
 
 	}
 
-	save() { 
+	save() {
 		const filename = Dialog('Save');
 		if (filename) {
 			let result = converter.saveMidi(filename);
 			let newDescription = this.state.description;
-			this.state.description.push(result);
+			this.state.description.push((new Date()).toLocaleTimeString('en-GB') + ': ' + (result === true ? "File saved" : result));
 			this.setState(Object.assign(this.state, { description: newDescription }));
 		}
 	}
 
 	openMap(direction, index) {
 		let currentIndex = direction === "from" ? this.state.fromIndex : this.state.toIndex;
-		if (index !== -1 && index !== currentIndex) { 
+		if (index !== -1 && index !== currentIndex) {
 			const filename = this.state.availableMaps[index].filepath;
 			if (filename && ["to", "from"].includes(direction)) {
 				converter.readMap(filename, direction, (result) => {
@@ -62,24 +61,26 @@ export default class Convert extends Component {
 					if (result !== true) {
 						message = result;
 					}
-					
-					let state = this.state;
-					state.description.push((new Date()).toLocaleTimeString('en-GB') + ': ' + message);
-					direction === "from" ? state.fromIndex = index : state.toIndex = index;
 
-					this.setState(state);
+					//console.log(Date.now(), currentIndex, index);
+					//console.debug(message);
+					//let state = this.state;
+					//state.description.push((new Date()).toLocaleTimeString('en-GB') + ': ' + message);
+					//direction === "from" ? state.fromIndex = index : state.toIndex = index;
+
+					//this.setState(state);
 				});
 			}
 		}
 	}
 
-	openMidi() { 
+	openMidi() {
 		const filename = Dialog('Open');
 		if (filename) {
 			let name = filename.split('/').pop();
 			let message = `Loaded ${name} MIDI file`;
 			let result = converter.readMidi(filename);
-			
+
 			if (result !== true) {
 				message = result;
 			}
@@ -92,8 +93,8 @@ export default class Convert extends Component {
 	}
 
 	render() {
-		let serviceItems = this.state.availableMaps.map( (s, i) => {
-			return <Picker.Item key={i}>{ s.mapname }</Picker.Item>
+		let serviceItems = this.state.availableMaps.map((s, i) => {
+			return <Picker.Item key={i}>{s.mapname}</Picker.Item>
 		});
 
 		return (

@@ -123,39 +123,27 @@ class DrumMapConverter {
     convertMidi(callback) {
         let results = [];
         try {
-            this._results.push("-- Converting MIDI --");
             this._toMidi = MidiConvert.create();
             this._toMidi = Object.assign(this._toMidi, this._fromMidi);
-            //extract only percussion tracks
-            let drumsTracks = this._toMidi.tracks.filter((track) => {
-                return track.isPercussion;
+            
+            this._toMidi.tracks.forEach((track) => {
+                if (track.isPercussion) {
+                    let unusedTot = 0;
+                    track.notes.forEach((note) => {
+                        let gmNote = this._fromMap.map[note.midi].gm;
+                        note.midi = this._toMap.map[gmNote].note;
+                        
+                        if (gmNote === unusedNote) {
+                            unusedTot++;
+                        }
+                    });
+                    results.push((new Date()).toLocaleTimeString('en-GB') + ': ' + `Track "${track.name}": ${track.notes.length} notes converted` + (unusedTot > 0 ? `, ${unusedTot} unmapped and set to note ${unusedNote}` : ''));
+                }
             });
 
-            if (drumsTracks.length === 0) {
-                throw "No percussion track found";
-            }
-
-            drumsTracks.forEach((track) => {
-                let unusedTot = 0;
-                track.notes.forEach((note) => {
-                    let gmNote = this._fromMap.map[note.midi].gm;
-                    //capire con le note vuote ""
-                    note.midi = this._toMap.map[gmNote].note;
-                    
-                    if (gmNote === unusedNote) { 
-                        unusedTot ++;
-                    }
-                });
-                results.push(`Track "${track.name}": ${track.notes.length} notes converted` + (unusedTot > 0 ? + `, ${unusedTot} unmapped and set to note ${unusedNote}` : ''));
-            });
-
-            results.push("");
-            //overwrite tracks inside imported midi
-            //exported midi will contain only percussion tracks
-            this._toMidi.tracks = drumsTracks;
-            //resolve(true);
             callback(true, results);
         } catch (e) {
+            console.log("ERRORE", e);
             callback(false, e);
         }
     }
